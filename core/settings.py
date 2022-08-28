@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'user'
 ]
 
 MIDDLEWARE = [
@@ -70,12 +72,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# https://pypi.org/project/djongo/
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': environ.get('MD_DATABASE'),
+        'ENGINE': environ.get('DB_ENGINE'),
+        'NAME': environ.get('DB_DATABASE'),
     }
 }
 
@@ -109,3 +110,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}
+
+AUTH_USER_MODEL = 'user.User'
