@@ -1,0 +1,12 @@
+[run]
+omit =
+    core/*,
+    */admin.py
+    */apps.py
+    */__init__.py
+    */serializers.py
+    */urls.py
+    */manage.py
+    */test*
+    */migrations/*.py
+    .*

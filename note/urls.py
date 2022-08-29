@@ -5,5 +5,5 @@ from . import views
 app_name = 'note'
 
 urlpatterns = [
-    path('', views.NoteAPIView.as_view(), name='note_details'),
+    path('', views.NoteAPIView.as_view(), name='note_detail'),
 ]

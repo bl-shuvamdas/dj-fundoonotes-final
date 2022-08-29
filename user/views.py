@@ -15,7 +15,7 @@ class RegisterApiView(APIView):
             serializer = ResisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            response = {"data": serializer.data, "status": 200}
+            response = {"data": serializer.data, "status": 201}
         except ValidationError as e:
             response = {"message": e.detail, 'status': e.status_code}
         except Exception as e:
