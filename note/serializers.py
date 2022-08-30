@@ -1,4 +1,3 @@
-from drf_yasg import openapi
 from rest_framework import serializers
 
 from user.serializers import ResisterSerializer
@@ -21,3 +20,9 @@ class NoteSerializer(serializers.ModelSerializer):
             setattr(instance, k, v)
         instance.save()
         return instance
+
+
+class CollaboratorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ('id', 'collaborator')
