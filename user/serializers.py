@@ -18,7 +18,7 @@ class ResisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):  # noqa
     username = serializers.CharField(max_length=150, required=True, write_only=True)
     password = serializers.CharField(max_length=150, required=True, write_only=True)
-    token = serializers.CharField(read_only=True)
+    token = serializers.CharField(read_only=True, max_length=255)
 
     def create(self, validated_data):
         user = authenticate(**validated_data)

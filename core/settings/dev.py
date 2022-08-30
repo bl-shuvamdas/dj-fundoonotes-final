@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from datetime import timedelta
-from pathlib import Path
 from os import getenv
+from pathlib import Path
+
+from drf_yasg import openapi
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'user',
     'note',
 ]
@@ -138,5 +141,16 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 
-
 BASE_URL = getenv('BASE_URL', 'http://localhost:8000')
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'DEFAULT_INFO': openapi.Info(title="Fundoo Note API", default_version='v1'),
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Token',
+            'in': 'header'
+        }
+    }
+}

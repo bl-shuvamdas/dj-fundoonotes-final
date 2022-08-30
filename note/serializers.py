@@ -1,3 +1,4 @@
+from drf_yasg import openapi
 from rest_framework import serializers
 
 from user.serializers import ResisterSerializer
@@ -10,6 +11,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ('id', 'title', 'description', 'user', 'collaborator')
+        swagger_schema_fields = {"required": ['title', 'description']}
 
     def create(self, validated_data):
         return Note.objects.create(**validated_data)

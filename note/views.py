@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
@@ -13,11 +15,14 @@ from .serializers import NoteSerializer
 class NoteAPIView(APIView):
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses={200: NoteSerializer(many=True)})
     @verify_token
     def get(self, request):
         response = {'message': 'success', 'status': 200, 'data': {}}
         try:
-            queryset = Note.objects.filter(user=request.query_params['user'])  # noqa
+            print(request.data)
+            print(request.query_params)
+            queryset = Note.objects.filter(user=request.data['user'])  # noqa
             serializer = NoteSerializer(queryset, many=True)
             response.update({"data": serializer.data})
         except ValidationError as e:
@@ -26,6 +31,7 @@ class NoteAPIView(APIView):
             response.update({"message": str(e), 'status': 400})
         return Response(response, status=response['status'])
 
+    @swagger_auto_schema(request_body=NoteSerializer)
     @verify_token
     def post(self, request):  # noqa
         response = {'message': 'Created', 'status': 201, 'data': {}}
@@ -38,6 +44,7 @@ class NoteAPIView(APIView):
             response.update({"message": e.detail, 'status': e.status_code})
         return Response(response, status=response['status'])
 
+    @swagger_auto_schema(request_body=NoteSerializer)
     @verify_token
     def put(self, request):  # noqa
         response = {'message': 'accepted', 'status': status.HTTP_202_ACCEPTED, 'data': {}}
@@ -53,6 +60,12 @@ class NoteAPIView(APIView):
             response.update({"message": str(e), 'status': 400})
         return Response(response, status=response['status'])
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={'id': openapi.Schema(title='ID', read_only=False, type=openapi.TYPE_INTEGER)}
+        )
+    )
     @verify_token
     def delete(self, request):  # noqa
         response = {'status': status.HTTP_204_NO_CONTENT, 'message': "no content"}
