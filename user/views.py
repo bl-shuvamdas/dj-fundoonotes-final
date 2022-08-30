@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
+from utils import JWT
+from utils.email_service import Email
+from .models import User
 from .serializers import ResisterSerializer, LoginSerializer
 
 
@@ -15,6 +18,7 @@ class RegisterApiView(APIView):
             serializer = ResisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            Email.verify_user(email=serializer.data['email'])
             response = {"data": serializer.data, "status": 201}
         except ValidationError as e:
             response = {"message": e.detail, 'status': e.status_code}
@@ -36,4 +40,20 @@ class LoginApiView(APIView):
             response = {"message": e.detail, 'status': e.status_code}
         except Exception as e:
             response = {"message": str(e), 'status': 400}
+        return Response(response, status=response['status'])
+
+
+class VerifyUser(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, token):
+        response = {'message': 'user verified', "status": 200}
+        try:
+            payload = JWT.decode(token)
+            del payload['exp']
+            user = User.objects.get(**payload)
+            user.is_verify = True
+            user.save()
+        except Exception as e:
+            response.update({'message': str(e), "status": 400})
         return Response(response, status=response['status'])

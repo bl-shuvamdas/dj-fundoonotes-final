@@ -7,5 +7,5 @@ migrate:
 	@$(py) makemigrations
 	@$(py) migrate
 
-run: migrate
+run: migrate test
 	@$(py) runserver
