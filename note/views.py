@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from user.authentiation import verify_token
+from utils.redis_service import Cache
 from .models import Note
 from .serializers import NoteSerializer
 
@@ -20,11 +21,8 @@ class NoteAPIView(APIView):
     def get(self, request):
         response = {'message': 'success', 'status': 200, 'data': {}}
         try:
-            print(request.data)
-            print(request.query_params)
-            queryset = Note.objects.filter(user=request.data['user'])  # noqa
-            serializer = NoteSerializer(queryset, many=True)
-            response.update({"data": serializer.data})
+            data = Cache.get_all(name=request.data['user'])
+            response.update({"data": data})
         except ValidationError as e:
             response.update({"message": e.detail, 'status': e.status_code})
         except Exception as e:
@@ -39,6 +37,7 @@ class NoteAPIView(APIView):
             serializer = NoteSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            Cache.save(name=request.data['user'], payload=serializer.data)
             response.update({"data": serializer.data})
         except ValidationError as e:
             response.update({"message": e.detail, 'status': e.status_code})
@@ -53,6 +52,7 @@ class NoteAPIView(APIView):
             serializer = NoteSerializer(queryset, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            Cache.save(name=request.data['user'], payload=serializer.data)
             response.update({"data": serializer.data})
         except ValidationError as e:
             response.update({"message": e.detail, 'status': e.status_code})
@@ -71,6 +71,7 @@ class NoteAPIView(APIView):
         response = {'status': status.HTTP_204_NO_CONTENT, 'message': "no content"}
         try:
             queryset = Note.objects.get(pk=request.data['id'])  # noqa
+            Cache.drop(name=request.data['user'], key=request.data['id'])
             queryset.delete()
         except Exception as e:
             response.update({"message": str(e), 'status': 400})

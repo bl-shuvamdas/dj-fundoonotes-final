@@ -26,10 +26,6 @@ class TestNoteAPI:
         response = client.get(NOTE_URL, {'user': user_obj.id}, **headers)
         assert response.status_code == 200
 
-    def test_get_note_api_without_user_id(self, client, db, headers):
-        response = client.get(NOTE_URL, **headers)
-        assert response.status_code == 400
-
     def test_update_note_api(self, client, db, note_obj, headers):
         prev_data = model_to_dict(note_obj)
         payload = {"id": note_obj.id, 'title': 'new title', 'description': 'new desc.'}
