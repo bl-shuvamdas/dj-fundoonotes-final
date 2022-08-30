@@ -4,8 +4,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
-from utils import JWT
-from utils.email_service import Email
+from utils import JWT, send_verify_email
 from .models import User
 from .serializers import ResisterSerializer, LoginSerializer
 
@@ -20,7 +19,7 @@ class RegisterApiView(APIView):
             serializer = ResisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            Email.verify_user(email=serializer.data['email'])
+            send_verify_email.delay(email=serializer.data['email'])
             response = {"data": serializer.data, "status": 201}
         except ValidationError as e:
             response = {"message": e.detail, 'status': e.status_code}

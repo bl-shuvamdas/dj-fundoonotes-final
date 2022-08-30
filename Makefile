@@ -9,3 +9,7 @@ migrate:
 
 run: migrate test
 	@$(py) runserver
+
+
+celery:
+	@celery -A core worker -l INFO --pool=solo

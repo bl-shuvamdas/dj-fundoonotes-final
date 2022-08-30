@@ -156,3 +156,7 @@ SWAGGER_SETTINGS = {
 }
 
 REDIS_CONFIG = {'host': 'localhost', 'port': 6379, 'db': 0}
+
+CELERY_TIMEZONE = "Asia/Kolkata"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

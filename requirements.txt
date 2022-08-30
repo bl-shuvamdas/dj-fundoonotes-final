@@ -6,3 +6,4 @@ pytest-cov==3.0.0
 PyJWT==2.4.0
 drf-yasg==1.21.3
 redis==4.3.4
+celery==5.2.7
