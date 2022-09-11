@@ -9,3 +9,6 @@ migrate:
 
 run: migrate test
 	@$(py) runserver
+
+runpika:
+	@$(py) runpika

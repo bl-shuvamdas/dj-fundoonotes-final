@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'user',
     'note',
+    'utils'
 ]
 
 MIDDLEWARE = [
@@ -156,3 +157,8 @@ SWAGGER_SETTINGS = {
 }
 
 REDIS_CONFIG = {'host': 'localhost', 'port': 6379, 'db': 0}
+PIKA_CONFIG = {
+    'host': 'localhost',
+    'queue': getenv('PIKA_QUEUE', 'pika'),
+    'exchange': ''
+}

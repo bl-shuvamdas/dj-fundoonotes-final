@@ -3,8 +3,8 @@ from typing import List
 
 from django.conf import settings
 from django.core.mail import send_mail
-from rest_framework.reverse import reverse
 from django.utils.timezone import timedelta
+from rest_framework.reverse import reverse
 
 from utils import JWT
 
