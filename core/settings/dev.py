@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'user',
     'note',
+    'rawq'
 ]
 
 MIDDLEWARE = [

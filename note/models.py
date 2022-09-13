@@ -7,3 +7,7 @@ class Note(models.Model):
     description = models.TextField()
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
     collaborator = models.ManyToManyField('user.User', related_name='collaborator')
+
+    class Meta:
+        db_table = 'note'
+        ordering = ('id',)
