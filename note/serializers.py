@@ -13,7 +13,7 @@ class NoteSerializer(serializers.ModelSerializer):
         swagger_schema_fields = {"required": ['title', 'description']}
 
     def create(self, validated_data):
-        return Note.objects.create(**validated_data)
+        return Note.objects.create(**validated_data)    # noqa
 
     def update(self, instance, validated_data):
         for k, v in validated_data.items():
